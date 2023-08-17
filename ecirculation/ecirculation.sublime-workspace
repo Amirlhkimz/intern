@@ -1,0 +1,826 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"name",
+				"nameUjian"
+			],
+			[
+				"nam",
+				"nameUjian"
+			],
+			[
+				"na",
+				"nameUjian"
+			],
+			[
+				"Bil",
+				"BilanganRespondenModelRow"
+			],
+			[
+				"Bi",
+				"BilanganRespondenModel"
+			],
+			[
+				"di",
+				"div\tTag"
+			],
+			[
+				"po",
+				"post"
+			],
+			[
+				"th",
+				"this"
+			],
+			[
+				"loc",
+				"localhost"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"ex",
+				"exit"
+			],
+			[
+				"u",
+				"Umur"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "TambahPengguna.php",
+			"settings":
+			{
+				"buffer_size": 12180,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "TambahUrusan.php",
+			"settings":
+			{
+				"buffer_size": 13381,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "upload_file.php",
+			"settings":
+			{
+				"buffer_size": 5716,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "<?php require_once('Connections/connspkp.php'); ?>\n<?php\nob_start();\nsession_start();\n\nif($_SESSION[\"Kumpulan\"] !='urusetia' ){\n    header(\"Location: Logout.php\");\n  };\n\n\n?>\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\">\n  <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js\"></script>\n  <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\"></script>\n</head>\n\n<?php\ninclude('include/FusionCharts.php');\ninclude('include/FC_Colors.php');\ninclude('include/FormatDate.php');\n\n$idUrusan=$_GET['I'];\n\nmysql_select_db($database_connspkp, $connspkp);\n//$query_RsUrusan = \"SELECT * FROM tblurusan WHERE id='$idUrusan'\";\n$query_RsUrusan = \"SELECT tblurusan.*, tblpengguna.Gelaran, tblpengguna.NamaPenuh FROM tblurusan\n          INNER JOIN tblpengguna\n          ON tblurusan.idCipta=tblpengguna.id\n          WHERE tblurusan.id='$idUrusan'\";\n$RsUrusan = mysql_query($query_RsUrusan, $connspkp) or die(mysql_error());\n$row_RsUrusan = mysql_fetch_assoc($RsUrusan);\n$totalRows_RsUrusan = mysql_num_rows($RsUrusan);\n\nmysql_select_db($database_connspkp, $connspkp);\n//$query_RsUrusan = \"SELECT * FROM tblurusan WHERE id='$idUrusan'\";\n$query_RsKemaskini = \"SELECT  tblurusan.*, tblpengguna.Gelaran, tblpengguna.NamaPenuh FROM tblurusan\n          INNER JOIN tblpengguna\n          ON tblurusan.idkemaskini=tblpengguna.id\n          WHERE tblurusan.id='$idUrusan'\";\n$RsKemaskini = mysql_query($query_RsKemaskini, $connspkp) or die(mysql_error());\n$row_RsKemaskini = mysql_fetch_assoc($RsKemaskini);\n$totalRows_RsKemaskini = mysql_num_rows($RsKemaskini);\n\nmysql_select_db($database_connspkp, $connspkp);\n//$query_RsStatusUrusan = \"SELECT * FROM tblstatusurusan WHERE idUrusan='$idUrusan'\";\n$query_RsStatusUrusan = \"SELECT tblstatusurusan.*, tblpengguna.Gelaran, tblpengguna.NamaPenuh, tblpengguna.Susunan\n            FROM tblstatusurusan\n            INNER JOIN tblpengguna\n            ON tblstatusurusan.idPengguna=tblpengguna.id\n            WHERE tblstatusurusan.idUrusan='$idUrusan'\n            ORDER BY tblstatusurusan.susunan\";\n$RsStatusUrusan = mysql_query($query_RsStatusUrusan, $connspkp) or die(mysql_error());\n$row_RsStatusUrusan = mysql_fetch_assoc($RsStatusUrusan);\n$totalRows_RsStatusUrusan = mysql_num_rows($RsStatusUrusan);\n\nmysql_select_db($database_connspkp, $connspkp);\n//$query_RsStatusUrusan = \"SELECT * FROM tblstatusurusan WHERE idUrusan='$idUrusan'\";\n$query_RsStatusUrusanL = \"SELECT * FROM tblstatusurusan WHERE idUrusan='$idUrusan' GROUP BY Keputusan ORDER BY Keputusan\";\n$RsStatusUrusanL = mysql_query($query_RsStatusUrusanL, $connspkp) or die(mysql_error());\n$row_RsStatusUrusanL = mysql_fetch_assoc($RsStatusUrusanL);\n$totalRows_RsStatusUrusanL = mysql_num_rows($RsStatusUrusanL);\n\nmysql_select_db($database_connspkp, $connspkp);\n//$query_RsStatusUrusan = \"SELECT * FROM tblstatusurusan WHERE idUrusan='$idUrusan'\";\n$query_RsStatusUrusanT = \"SELECT * FROM tblurusan WHERE id='$idUrusan'\";\n$RsStatusUrusanT = mysql_query($query_RsStatusUrusanT, $connspkp) or die(mysql_error());\n$row_RsStatusUrusanT = mysql_fetch_assoc($RsStatusUrusanT);\n$totalRows_RsStatusUrusanT = mysql_num_rows($RsStatusUrusanT);\n\n$idPengguna1=$row_RsUrusan['idCipta'];\n\n?>\n\n<?php\ninclude 'include/Popup.php';\n?>\n<SCRIPT LANGUAGE=\"Javascript\" SRC=\"include/FusionCharts.js\"></SCRIPT>\n<style type=\"text/css\">\n<!--\nbody {\n  margin-left: 0px;\n  margin-top: 0px;\n  margin-right: 0px;\n  margin-bottom: 0px;\n  background-color: #577dc9;\n}\n-->\n</style>\n<link href=\"myStyle.css\" rel=\"stylesheet\" type=\"text/css\">\n<link rel=\"shortcut icon\" href=\"images/faviconjata.ico\">\n<style type=\"text/css\">\n<!--\n.style1 {color: #FFFFFF}\n.style3 {\n  font-family: Arial;\n  font-size: 12px;\n}\n.style7 {font-size: 12px}\nbody,td,th {\n  font-family: Arial;\n  font-size: 12px;\n}\n.style9 {color: #6699CC}\n\nbody {\n  margin-left: 0px;\n  margin-top: 0px;\n  margin-right: 0px;\n  margin-bottom: 0px;\n  /*background-color: DimGray;*/\n  background-image: url(\"././images/bgblur.jpg\");\n  background-size: cover;\n}\n-->\n\n</style>\n\n<div align=\"center\" >\n   <table class=\"table\" >\n    <!--DWLayoutTable-->\n    <tr>\n      <td  colspan=\"3\" valign=\"top\" align=\"center\"><img src=\"images/wqs.png\"></td>\n    </tr>\n    <tr>\n      <td width=\"32\" height=\"409\" valign=\"top\"></td>\n      <td valign=\"top\"><table class=\"table\">\n          <!--DWLayoutTable-->\n          <tr>\n            <td height=\"43\" colspan=\"2\" valign=\"top\"><?php include 'include/profile.php'; ?></td>\n          </tr>\n          <tr>\n            <td width=\"204\" height=\"338\" valign=\"top\"><?php include 'include/menuadmin.php'; ?>\n            <p>&nbsp;</p>\n            </td>\n            <td valign=\"top\" align=\"center\"><table class=\"table\">\n              <!--DWLayoutTable-->\n              <tr>\n                <td width=\"743\" height=\"336\" valign=\"top\"><p><span class=\"style9\">LIHAT URUSAN </span></p>\n                  <table cellpadding=\"0\" cellspacing=\"1\" bgcolor=\"#999999\" class=\"table table-striped\">\n                    <!--DWLayoutTable-->\n                    <tr>\n                      <td width=\"10%\" bgcolor=\"#999999\">Jenis Urusan : </td>\n                      <td colspan=\"2\" bgcolor=\"#FFFFFF\"><?php echo $row_RsUrusan['Jenis']; ?></td>\n                    </tr>\n                    <tr>\n                      <td width=\"10%\"  bgcolor=\"#999999\">Butiran : </td>\n                      <td colspan=\"2\" bgcolor=\"#FFFFFF\"><?php echo $row_RsUrusan['Ringkasan']; ?></td>\n                    </tr>\n                    <tr>\n                      <td width=\"10%\"  height=\"17\" bgcolor=\"#999999\">Kertas : </td>\n                      <td colspan=\"2\" bgcolor=\"#FFFFFF\"><a href=\"<?php echo $row_RsUrusan['Link']; ?>\" target=\"_blank\"><?php echo $row_RsUrusan['Kertas']; ?></a></td>\n                    </tr>\n                    <tr>\n                      <td width=\"10%\"  height=\"17\" bgcolor=\"#999999\">No. Fail : </td>\n                      <td colspan=\"2\" bgcolor=\"#FFFFFF\"><strong><?php echo $row_RsUrusan['NoKertas']; ?></strong></td>\n                    </tr>\n                   <tr>\n                      <td width=\"10%\"  height=\"17\" bgcolor=\"#999999\">No. Ruj. Bahagian: </td>\n                      <td colspan=\"2\" bgcolor=\"#FFFFFF\"><strong><?php echo $row_RsUrusan['rujBhg']; ?></strong></td>\n                    </tr>\n                   <tr>\n                      <td width=\"10%\"  height=\"17\" bgcolor=\"#999999\">Mesyuarat </td>\n                      <td colspan=\"2\" bgcolor=\"#FFFFFF\"><strong><?php echo $row_RsUrusan['bilMesyuarat']; ?></strong></td>\n                    </tr>\n<!--\n                    <tr>\n                      <td width=\"10%\"  height=\"17\" bgcolor=\"#999999\"><!--DWLayoutEmptyCell-->&nbsp;</td>\n                      <!-- <td bgcolor=\"#FFFFFF\">DWLayoutEmptyCell&nbsp;</td> -->\n                      <!-- <td width=\"308\" rowspan=\"9\" bgcolor=\"#FFFFFF\"><div align=\"center\"> -->\n\n            <?php\n        //  $strXML=\"\";\n        //  $strXML = \"<graph caption='Carta Keputusan' xAxisName='KEPUTUSAN' yAxisName='JUMLAH' decimalPrecision='0' formatNumberScale='0'>\";\n\n        //  do{\n        //      $row_RsUrusanL['GrValue']=\"\";\n\n        //      mysql_select_db($database_connspkp, $connspkp);\n        //      $query_RsUrusanL = \"SELECT COUNT(id) as GrValue FROM tblstatusurusan WHERE Keputusan = '\".$row_RsStatusUrusanL['Keputusan'].\"' AND idUrusan='\".$idUrusan.\"'\";\n        //      $RsUrusanL = mysql_query($query_RsUrusanL, $connspkp) or die(mysql_error());\n        //      $row_RsUrusanL = mysql_fetch_assoc($RsUrusanL);\n\n        //      $strXML .= \"<set name='\".$row_RsStatusUrusanL['Keputusan'].\"' value='\".$row_RsUrusanL['GrValue'].\"' color='\".getFCColor().\"' />\";\n\n\n        //  } while ($row_RsStatusUrusanL = mysql_fetch_assoc($RsStatusUrusanL));\n\n        //  $strXML .=  \"</graph>\";\n        //  echo renderChartHTML('FusionCharts/FCF_Column3D.swf', \"\", $strXML, \"myNext\", 300, 200);\n\n\n        // mysql_free_result($RsStatusUrusanL);\n        // mysql_free_result($RsUrusanL);\n        ?>\n\n            </div></td>\n                    <!-- </tr> -->\n                    <tr>\n                      <td width=\"10%\"  height=\"17\" bgcolor=\"#999999\">Status Akhir : </td>\n                      <td width=\"290\" bgcolor=\"#FFFFFF\"><?php echo $row_RsUrusan['Status']; ?></td>\n                      </tr>\n                    <tr>\n                      <td width=\"10%\"  height=\"17\" bgcolor=\"#999999\"><!--DWLayoutEmptyCell-->&nbsp;</td>\n                      <td bgcolor=\"#FFFFFF\"><!--DWLayoutEmptyCell-->&nbsp;</td>\n                      </tr>\n                    <tr>\n                      <td width=\"10%\"  height=\"17\" bgcolor=\"#999999\">Cipta oleh :</td>\n                      <td bgcolor=\"#FFFFFF\"><?php echo $row_RsUrusan['Gelaran']; ?> <?php echo $row_RsUrusan['NamaPenuh']; ?> </td>\n                      </tr>\n                    <tr>\n                      <td width=\"10%\"  height=\"17\" bgcolor=\"#999999\">Tarikh Cipta: </td>\n                      <td bgcolor=\"#FFFFFF\"><?php echo format_datetime($row_RsUrusan['TrCipta']); ?></td>\n                      </tr>\n                    <tr>\n                      <td width=\"10%\"  height=\"17\" bgcolor=\"#999999\"><!--DWLayoutEmptyCell-->&nbsp;</td>\n                      <td bgcolor=\"#FFFFFF\"><!--DWLayoutEmptyCell-->&nbsp;</td>\n                      </tr>\n                    <tr>\n                      <td  width=\"10%\" height=\"17\" bgcolor=\"#999999\">Kemas kini oleh : </td>\n                      <td bgcolor=\"#FFFFFF\"><?php echo $row_RsKemaskini['Gelaran']; ?> <?php echo $row_RsKemaskini['NamaPenuh']; ?> </td>\n                      </tr>\n                    <tr>\n                      <td  width=\"10%\" height=\"17\" bgcolor=\"#999999\">Tarikh Kemaskini : </td>\n                      <td bgcolor=\"#FFFFFF\"><?php echo format_datetime($row_RsUrusan['TrKemaskini']);\n                       ?></td>\n                      </tr>\n                    <tr>\n                      <td width=\"10%\"  height=\"17\" bgcolor=\"#999999\">Cetak :</td>\n                      <td bgcolor=\"#FFFFFF\"><a href=\"CetakSelesai.php?IdU=<?php echo $idUrusan; ?>\" target=\"_blank\"><img src=\"images/printer.gif\" alt=\"\" width=\"21\" height=\"17\" /></a></td>\n                      </tr>\n                  </table>\n                  <br>\n      <table cellpadding=\"1\"\" cellspacing=\"1\" class=\"table\">\n                    <tr bgcolor=\"#999999\">\n                      <td width=\"6%\"><span class=\"style1\">No</span></td>\n                      <td width=\"20%\"><span class=\"style1\">Edaran kepada </span></td>\n                      <td width=\"10%\"><span class=\"style1\">Status </span></td>\n                      <td width=\"14%\"><span class=\"style1\">Keputusan</span></td>\n                      <td width=\"38%\"><span class=\"style1\">Ulasan </span></td>\n                      <td width=\"16%\"><span class=\"style1\">Tarikh Kemas kini </span></td>\n                      <td width=\"11%\"><span class=\"style1\">Tempoh </span></td>\n                    </tr>\n\n                    <?php\n            //2 color rows//////////////////////////////////////////////////////////////////////\n          $color1 = \"white\";\n          $color2 = \"#D9ECFF\";\n            $row_count = 0;\n          $No=(($pageNum_RsStatusUrusan)*$maxRows_RsStatusUrusan);\n\n              //Looping result of RsUrusan/////////////////////////////////////////////////\n        do {\n\n                if (($row_RsStatusUrusan['Status'])=='Selesai') {\n\n                  $strMula=$row_RsStatusUrusan['TrTerima'];\n                  //$strKini=date(\"Y-m-j  H:i:s\");\n                  $strKini=$row_RsStatusUrusan['TrSelesai'];\n\n                  $date_diff = abs(strtotime($strKini)-strtotime($strMula)) / 86400;\n\n                }\n\n                else if (($row_RsStatusUrusan['Status'])=='BATAL') {\n\n                  $strMula=$row_RsStatusUrusan['TrTerima'];\n                  $strKini=$row_RsStatusUrusan['TrSelesai'];\n\n                  $date_diff = abs(strtotime($strKini)-strtotime($strMula)) / 86400;\n\n                }\n\n                else if ((($row_RsStatusUrusan['Status'])=='Baru') || (($row_RsStatusUrusan['Status'])=='Pertimbangan')) {\n\n                  $strMula=$row_RsStatusUrusan['TrTerima'];\n                  $strKini=date(\"Y-m-j  H:i:s\");\n                  //$strKini=$row_RsStatusUrusan['TrSelesai'];\n\n                  $date_diff = abs(strtotime($strKini)-strtotime($strMula)) / 86400;\n\n                }\n\n                else  {\n\n                  $date_diff=0;\n\n                };\n\n\n\n              $No++;\n            $row_color = ($row_count % 2) ? $color1 : $color2;\n          ?>\n                    <tr bgcolor=\"<?php echo $row_color; ?>\" onMouseOver=\"this.bgColor='#FFB366'\" onMouseOut=\"this.bgColor='<?php echo $row_color; ?>'\">\n                      <td valign=\"top\"><?php echo $No; ?></td>\n                      \n                      <td><?php echo $row_RsStatusUrusan['Gelaran']; ?><br>\n                          <?php echo $row_RsStatusUrusan['NamaPenuh'];?>\n                      </td>\n\n                      <td><table width=\"98%\"  border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n                          <?php if (($row_RsStatusUrusan['Status'])=='Baru') { ?>\n                          <tr>\n                            <td height=\"16\" bgcolor=\"#80E474\"><div align=\"left\" class=\"style1\">\n                                <div align=\"center\"><strong><img src=\"images/baru.gif\" alt=\"Urusan Baru\" width=\"19\" height=\"12\" align=\"absmiddle\"></strong></div>\n                            </div></td>\n                          </tr>\n                          <?php\n            };\n            if (($row_RsStatusUrusan['Status'])=='Pertimbangan') {\n            ?>\n                          <tr>\n                            <td height=\"25\" bgcolor=\"#FC9696\"><div align=\"left\" class=\"style1\">\n                                <div align=\"center\"><strong><img src=\"images/prtmbg2.gif\" alt=\"Urusan Dalam Pertimbangan\" width=\"21\" height=\"21\" align=\"absmiddle\"></strong></div>\n                            </div></td>\n                          </tr>\n                          <?php\n            };\n            if (($row_RsStatusUrusan['Status'])=='Selesai') {\n            ?>\n                          <tr>\n                            <td bgcolor=\"#9191FF\"><div align=\"left\" class=\"style1\">\n                                <div align=\"center\"><strong><img src=\"images/selesai.png\" alt=\"Urusan Telah Selesai\" width=\"20\" height=\"20\" align=\"absmiddle\"></strong></div>\n                            </div></td>\n                          </tr>\n               <?php\n            };\n            if (($row_RsStatusUrusan['Status'])=='Cuti') {\n            ?>\n                          <tr>\n                            <td bgcolor=\"#eaafc9\"><div align=\"left\" class=\"style1\">\n                                <div align=\"center\"><strong><img src=\"images/cuti.png\" alt=\"Urusan Telah Selesai\" width=\"20\" height=\"20\" align=\"absmiddle\"></strong></div>\n                            </div></td>\n                          </tr>\n                          <?php };?>\n                      </table></td>\n                      <td><strong><?php echo $row_RsStatusUrusan['Keputusan']; ?></strong>&nbsp;&nbsp;\n            </td>\n                      <td><?php echo $row_RsStatusUrusan['Ulasan']; ?></td>\n                      <td><?php echo format_datetime($row_RsStatusUrusan['TrSelesai']); ?></td>\n                      <td><strong><?php echo round($date_diff) ;?> hari </strong></td>\n                    </tr>\n                    <?php\n            $row_count++;\n            } while ($row_RsStatusUrusan = mysql_fetch_assoc($RsStatusUrusan));\n            ?>\n\n    </table>\n\n                  <p>&nbsp;</p></td>\n              </tr>\n            </table></td>\n          </tr>\n          <tr>\n            <td height=\"28\" colspan=\"2\" valign=\"top\" bgcolor=\"#FF8C00\"><div align=\"center\">| <a href=\"Utama.php\"><font color=\"white\">Muka utama</font></a> | <a  href=\"#\" onclick=\"popUpWindow('<?php printf(\"TukarPass.php\"); ?>',800,200,400,300)\"><font color=\"white\">Tukar Katalaluan</font></a> | <a href=\"Logout.php\"><font color=\"white\">Keluar sistem</font></a> | </div></td>\n          </tr>\n         </table></td>\n\n    </tr>\n\n  </table>\n</div>\n<?php\nmysql_free_result($RsUrusan);\nmysql_free_result($RsKemaskini);\nmysql_free_result($RsStatusUrusan);\n?>\n",
+			"file": "LihatUrusan.php",
+			"file_size": 16786,
+			"file_write_time": 131587302001518123,
+			"settings":
+			{
+				"buffer_size": 16368,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "LihatUrusan2.php",
+			"settings":
+			{
+				"buffer_size": 34188,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Utama2.php",
+			"settings":
+			{
+				"buffer_size": 10608,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "index.php",
+			"settings":
+			{
+				"buffer_size": 6218,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/fauzi.jabar/Desktop/restore/ipp",
+		"/C/xampp/htdocs/ecirculationdev"
+	],
+	"file_history":
+	[
+		"/C/xampp/htdocs/ecirculationdev/index.html",
+		"/C/xampp/htdocs/ecirculationdev/TambahPengguna_bak.php",
+		"/C/xampp/htdocs/ecirculationdev/include/profile.php",
+		"/C/xampp/htdocs/ecirculationdev/Utama2.php",
+		"/C/xampp/htdocs/ecirculationdev/TambahMesyuarat.php",
+		"/C/xampp/htdocs/ecirculationdev/LihatUrusan.php",
+		"/C/xampp/htdocs/ecirculationdev/upload_file.php",
+		"/C/xampp/htdocs/ecirculationdev/Kemaskini.php",
+		"/C/xampp/htdocs/ecirculationdev/EmailUrusetia.php",
+		"/C/xampp/htdocs/ecirculationdev/LihatUrusan2.php",
+		"/C/xampp/htdocs/ecirculationT/LihatUrusan2.php",
+		"/C/xampp/htdocs/ecirculationT/Kemaskini.php",
+		"/C/xampp/htdocs/ecirculationT/StatusPertimbang.php",
+		"/C/xampp/htdocs/ecirculationdev/LaporanKeputusan.php",
+		"/C/xampp/htdocs/ecirculationdev/LaporanKeputusanUrusanU.php",
+		"/C/xampp/htdocs/ecirculationdev/Utama.php",
+		"/C/xampp/htdocs/ecirculationdev/Pengguna.php",
+		"/C/xampp/htdocs/ecirculationdev/LaporanAktivitiU.php",
+		"/C/xampp/htdocs/ecirculationdev/LaporanJenisUrusanA.php",
+		"/C/xampp/htdocs/ecirculationdev/LaporanJenisUrusanU.php",
+		"/C/xampp/htdocs/ecirculationdev/LihatLog.php",
+		"/C/xampp/htdocs/ecirculationdev/bak/Pengguna.php",
+		"/C/xampp/htdocs/ecirculationdev/KemaskiniPengguna.php",
+		"/C/xampp/htdocs/ecirculationdev/kemasMesyuarat.php",
+		"/C/xampp/htdocs/ecirculationdev/TambahUrusan.php",
+		"/C/xampp/htdocs/ecirculationdev/TambahPengguna.php",
+		"/C/xampp/htdocs/ecirculationdev/Mesyuarat.php",
+		"/C/xampp/htdocs/ecirculationdev/Pengumuman.php",
+		"/C/xampp/htdocs/ecirculationdev/TambahPengumuman.php",
+		"/C/xampp/htdocs/ecirculationT/include/profile.php",
+		"/C/xampp/htdocs/ecirculationdev/CetakSelesaiL.php",
+		"/C/xampp/htdocs/ecirculationT/CetakSelesai.php",
+		"/C/xampp/htdocs/ecirculationT/LihatUrusan.php",
+		"/C/xampp/htdocs/ecirculationT/TambahUrusan.php",
+		"/C/xampp/htdocs/ecirculationdev/bak/KemaskiniPengguna.php",
+		"/C/xampp/htdocs/ecirculationdev/designpdf.php",
+		"/C/xampp/htdocs/ecirculationdev/index.php",
+		"/C/xampp/htdocs/ecirculationdev/ListUrusan3.php",
+		"/C/xampp/htdocs/ecirculationdev/include/menusub.php",
+		"/C/xampp/htdocs/ecirculationdev/LaporanJenisUrusanS.php",
+		"/C/Users/fauzi.jabar/AppData/Local/Temp/Rar$DIa0.663/search_start.php",
+		"/C/xampp/htdocs/ecirculationdev/fail-utama",
+		"/C/xampp/htdocs/eparlimen/main.php",
+		"/C/xampp/htdocs/sppfs/api/paging/paging.php",
+		"/C/Users/fauzi.jabar/Pictures/Karaoke Room – Merdeka Beach Resort.html",
+		"/C/xampp/htdocs/ecirculationdev/Connections/connspkp.php",
+		"/C/xampp/htdocs/ecirculation/Connections/connspkp.php",
+		"/C/xampp/htdocs/ecirculationdev/Logger.php",
+		"/C/project/rep.generic.psikometrik_1/project.json",
+		"/C/Users/fauzi.jabar/Documents/ReportTahunan.cs",
+		"/C/Users/fauzi.jabar/Documents/BilanganResponden.html",
+		"/C/xampp/htdocs/iContract/application/models/ref_maklumat_model.php",
+		"/C/xampp/htdocs/iContract/application/controllers/tadbir/proses_kontrak_cont.php",
+		"/C/xampp/htdocs/iContract/application/views/tadbir/view_tab1.php",
+		"/C/xampp/htdocs/eparlimen/include/dbconnect.php",
+		"/C/xampp/htdocs/eparlimen/login.php",
+		"/C/Users/fauzi.jabar/Desktop/restore/ipp/ipp/application/views/urusetia/pengguna_baru.php",
+		"/C/Users/fauzi.jabar/Desktop/restore/ipp_old/application/views/responden_view.php",
+		"/C/Users/fauzi.jabar/Desktop/restore/ipp/ipp/application/views/urusetia/responden.php",
+		"/C/Users/fauzi.jabar/Desktop/restore/ipp_old/application/views/urusetia/responden_baru.php",
+		"/C/Users/fauzi.jabar/Desktop/restore/ipp_old/application/views/index.html",
+		"/C/Users/fauzi.jabar/Desktop/restore/ipp_old/application/views/insert_view.php",
+		"/C/xampp/htdocs/ipp/application/controllers/akaun/responden_ctrl.php",
+		"/C/xampp/htdocs/ipp/application/models/akaun/responden_model.php",
+		"/C/xampp/htdocs/ipp/application/views/responden_view.php",
+		"/C/xampp/htdocs/ipp/application/models/akaun/insert_model.php",
+		"/C/xampp/htdocs/ipp/application/models/kodbidang.php",
+		"/C/xampp/htdocs/ipp/application/models/kodpenaja.php",
+		"/C/xampp/htdocs/ipp/application/models/kodprogrampenaja.php",
+		"/C/xampp/htdocs/ipp/application/controllers/akaun/insert_ctrl.php",
+		"/C/xampp/htdocs/ipp/application/config/database.php",
+		"/C/xampp/htdocs/ipp/application/config/config.php",
+		"/C/xampp/htdocs/ipp/application/config/config.sample.php",
+		"/C/xampp/htdocs/ipp/.gitignore",
+		"/C/xampp/htdocs/ipp/application/controllers/akaun/Daftar.php",
+		"/C/xampp/htdocs/ipp/application/views/urusetia/responden.php",
+		"/C/xampp/htdocs/ipp/application/views/urusetia/laporan_sesi_ujian.php",
+		"/C/xampp/htdocs/ipp/application/views/urusetia/pengguna.php",
+		"/C/xampp/htdocs/ipp/application/config/database.sample.php",
+		"/C/xampp/htdocs/ipp/application/views/urusetia/pemilihan_responden.php",
+		"/C/xampp/htdocs/ipp/application/models/akaun/Akaun_model.php",
+		"/C/xampp/htdocs/ipp/application/controllers/akaun/Kod.php",
+		"/C/xampp/htdocs/ipp/application/controllers/akaun/Tadbir.php",
+		"/C/xampp/htdocs/ipp_old/application/controllers/akaun/Tadbir.php",
+		"/C/xampp/htdocs/ipp/application/controllers/akaun/Ujian.php",
+		"/C/xampp/htdocs/ipp/application/views/insert_view.php",
+		"/C/xampp/htdocs/CodeIgniter-insert/application/views/insert_view.php",
+		"/C/xampp/htdocs/CodeIgniter-insert/application/models/insert_model.php",
+		"/C/xampp/htdocs/CodeIgniter-insert/application/controllers/insert_ctrl.php",
+		"/C/xampp/htdocs/CodeIgniter-insert/application/config/database.php",
+		"/C/xampp/htdocs/CodeIgniter-insert/application/models/index.html",
+		"/C/xampp/htdocs/CodeIgniter-insert/application/config/config.php",
+		"/C/xampp/htdocs/create_codeigniter_form/application/controllers/insert_ctrl.php",
+		"/C/xampp/htdocs/create_codeigniter_form/application/views/insert_view.php",
+		"/C/xampp/htdocs/create_codeigniter_form/application/models/insert_model.php",
+		"/C/xampp/htdocs/create_codeigniter_form/application/controllers/main_controller.php",
+		"/C/xampp/htdocs/mysite/application/config/config.php",
+		"/C/xampp/htdocs/ipp/application/views/urusetia/pengguna_baru.php",
+		"/C/xampp/htdocs/mysite/application/controllers/contactform.php",
+		"/C/xampp/htdocs/mysite/application/views/contact_form_view.php",
+		"/C/xampp/htdocs/mysite/application/models/tesformmodel.php",
+		"/C/xampp/htdocs/mysite/application/index.html",
+		"/C/xampp/htdocs/mysite/application/models/Tesformmodel.php",
+		"/C/xampp/htdocs/iContract/application/controllers/account/manage_users.php",
+		"/C/Users/fauzi.jabar/Desktop/ukbp.html",
+		"/C/Users/fauzi.jabar/OneDrive/Pictures/Documents/test.html",
+		"/C/xampp/htdocs/tracerstudy/app/views/pegawai.html",
+		"/C/xampp/htdocs/tracerstudy/app/views/pelajar.html",
+		"/C/xampp/htdocs/tracerstudy/app/scripts/controllers/pelajar.js",
+		"/C/xampp/htdocs/tracerstudy/app/scripts/controllers/pegawai.js",
+		"/C/xampp/htdocs/tracerstudy/api/lookup_kementerian.php",
+		"/C/xampp/htdocs/tracerstudy/app/scripts/services/lookupsvc.js",
+		"/C/xampp/htdocs/tracerstudy/api/lookup_bidang.php",
+		"/C/xampp/htdocs/tracerstudy/api/config/db_connection",
+		"/C/Users/fauzi.jabar/Downloads/SQLyog.Ultimate.v11.1.1.0/key.txt"
+	],
+	"find":
+	{
+		"height": 43.0
+	},
+	"find_in_files":
+	{
+		"height": 117.0,
+		"where_history":
+		[
+			"C:\\xampp\\htdocs\\ecirculationT"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"row_RsStatusUrusan",
+			"tblstatusurusan",
+			"stridPengguna",
+			"tblstatusurusan",
+			"StatusPertimbang",
+			"statusPertimbangan",
+			"pertimbangan",
+			"update",
+			"selesai",
+			"update",
+			"$row_RsStatusUrusan",
+			"row_RsStatusUrusan",
+			"strTajuk",
+			"datang",
+			"txtS",
+			"Petunjuk ",
+			"Selamat datang",
+			"idPengguna",
+			"pageNum_RsStatusUrusan",
+			"Petunjuk ",
+			"ulasan",
+			"SULIT",
+			"ringkasan",
+			"jPA",
+			"SPA",
+			"selectBahagian",
+			"txtS",
+			"bil",
+			"031e",
+			"PegawaiCtrl"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 5,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "TambahPengguna.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12180,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9269,
+								9269
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 6192.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "TambahUrusan.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13381,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4831,
+								4837
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 6277.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "upload_file.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5716,
+						"regions":
+						{
+							"mark":
+							{
+								"flags": 144,
+								"icon": "dot",
+								"regions":
+								[
+									[
+										5362,
+										5362
+									]
+								],
+								"scope": "mark"
+							}
+						},
+						"selection":
+						[
+							[
+								4762,
+								4767
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 2376.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "LihatUrusan.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 16368,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								11296,
+								11273
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "LihatUrusan2.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 34188,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								107,
+								107
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "Utama2.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10608,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								107,
+								107
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "index.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6218,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1008.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 32.0
+	},
+	"input":
+	{
+		"height": 38.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "ecirculation.sublime-project",
+	"replace":
+	{
+		"height": 60.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"uta",
+				"ecirculationdev\\Utama2.php"
+			],
+			[
+				"inde",
+				"ecirculationdev\\index.php"
+			],
+			[
+				"index",
+				"ecirculationdev\\index.html"
+			],
+			[
+				"lih",
+				"ecirculationdev\\LihatUrusan2.php"
+			],
+			[
+				"ta",
+				"ecirculationdev\\TambahUrusan.php"
+			],
+			[
+				"up",
+				"ecirculationdev\\upload_file.php"
+			],
+			[
+				"lihaturusan2",
+				"ecirculationdev\\LihatUrusan2.php"
+			],
+			[
+				"ke",
+				"ecirculationdev\\Kemaskini.php"
+			],
+			[
+				"mail",
+				"ecirculationdev\\EmailUrusetia.php"
+			],
+			[
+				"liha",
+				"ecirculationdev\\LihatUrusan.php"
+			],
+			[
+				"p",
+				"ecirculationdev\\Pengguna.php"
+			],
+			[
+				"laporankeputusanurusanu.php",
+				"ecirculationdev\\LaporanKeputusanUrusanU.php"
+			],
+			[
+				"laporanj",
+				"ecirculationdev\\LaporanJenisUrusanU.php"
+			],
+			[
+				"laporanjenisurusana.php",
+				"ecirculationdev\\LaporanJenisUrusanA.php"
+			],
+			[
+				"laporankeputusan.php",
+				"ecirculationdev\\LaporanKeputusan.php"
+			],
+			[
+				"",
+				"ecirculationdev\\LihatUrusan2.php"
+			],
+			[
+				"laporanaktivitiu.php",
+				"ecirculationdev\\LaporanAktivitiU.php"
+			],
+			[
+				"lihaturusan2.php",
+				"ecirculationdev\\LihatUrusan2.php"
+			],
+			[
+				"pro",
+				"ecirculationdev\\include\\profile.php"
+			],
+			[
+				"pe",
+				"ecirculationdev\\bak\\Pengguna.php"
+			],
+			[
+				"tam",
+				"ecirculationdev\\TambahPengumuman.php"
+			],
+			[
+				"pengu",
+				"ecirculationdev\\Pengumuman.php"
+			],
+			[
+				"ut",
+				"ecirculationdev\\Utama.php"
+			],
+			[
+				"mes",
+				"ecirculationdev\\Mesyuarat.php"
+			],
+			[
+				"tamba",
+				"ecirculationdev\\TambahMesyuarat.php"
+			],
+			[
+				"ce",
+				"ecirculationdev\\CetakSelesaiL.php"
+			],
+			[
+				"li",
+				"ecirculationdev\\LihatUrusan.php"
+			],
+			[
+				"t",
+				"ecirculationdev\\TambahUrusan.php"
+			],
+			[
+				"kem",
+				"ecirculationdev\\kemasMesyuarat.php"
+			],
+			[
+				"kema",
+				"ecirculationdev\\KemaskiniPengguna.php"
+			],
+			[
+				"kemas",
+				"ecirculationdev\\KemaskiniPengguna.php"
+			],
+			[
+				"lihatur",
+				"ecirculationdev\\LihatUrusan2.php"
+			],
+			[
+				"laporankeputusanurusanu",
+				"ecirculationdev\\LaporanKeputusanUrusanU.php"
+			],
+			[
+				"lihat",
+				"ecirculationdev\\LihatUrusan.php"
+			],
+			[
+				"include/menusub.php",
+				"ecirculationdev\\include\\menusub.php"
+			],
+			[
+				"listurusan3",
+				"ecirculationdev\\ListUrusan3.php"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 370.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

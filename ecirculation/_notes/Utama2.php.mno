@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_rsPengumuman" value="name:id;datatype:int,name:Tajuk;datatype:string,name:Kandungan;datatype:blob,name:idCipta;datatype:string,name:trCipta;datatype:datetime,name:status;datatype:string" />
+	<infoitem key="UD_RsCountBaru" value="name:COUNT(*);datatype:int" />
+	<infoitem key="UD_RsCountPertimbang" value="name:COUNT(*);datatype:int" />
+	<infoitem key="UD_RsCountSelesai" value="name:COUNT(*);datatype:int" />
+</info>

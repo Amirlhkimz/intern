@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_RsPengumuman" value="name:id;datatype:int,name:Tajuk;datatype:string,name:Kandungan;datatype:blob,name:idCipta;datatype:string,name:trCipta;datatype:datetime,name:status;datatype:string" />
+</info>

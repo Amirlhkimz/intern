@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_RsLogin" value="name:id;datatype:int,name:Gelaran;datatype:string,name:NoKp;datatype:string,name:NamaPenuh;datatype:string,name:Jawatan;datatype:string,name:Gred;datatype:string,name:Bahagian;datatype:string,name:Lantikmula;datatype:datetime,name:Lantiktamat;datatype:datetime,name:NoHp;datatype:string,name:Email;datatype:string,name:Login;datatype:string,name:Klaluan;datatype:string,name:Kumpulan;datatype:string,name:Status;datatype:string" />
+</info>
